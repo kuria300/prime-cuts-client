@@ -8,7 +8,6 @@ on:
     paths-ignore:
        - '**.md'
        - 'assets/**'
-       - 'package.json'
   
   workflow_dispatch:
 
@@ -23,11 +22,11 @@ jobs:
   verify:
     name: "pr build check for bad code and unsued imports"
     runs-on: ubuntu-latest
-  # this is used to disable reports to vercel
-  env:
+    # this is used to disable reports to vercel
+    env:
       NEXT_TELEMETRY_DISABLED: "1"
   
-  steps:
+    steps:
      - uses: actions/checkout@v7
       
      - name: Setup Node.js
@@ -47,10 +46,11 @@ jobs:
        uses: actions/upload-artifact@v7
        with:
           name: build-output
-          path: next
+          path: .next
+          include-hidden-files: true
           retention-days: 10
 
-status-check:
+  status-check:
     name: Pr Build status
     needs: verify
     if: always()
@@ -63,7 +63,3 @@ status-check:
               exit 1
            fi
               echo "Pr checks passed"
-
-
-
-
